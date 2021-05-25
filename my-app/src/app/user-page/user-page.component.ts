@@ -14,9 +14,9 @@ export class UserPageComponent {
     dispatchRequest: () => this.store.dispatch(fromUserActions.loadUsersFetch()),
     dispatchRequestCancel: () => this.store.dispatch(fromUserActions.loadUsersCancelFetch()),
     // @ts-ignore
-    requestSuccess$: () => this.store.select((state: AppState) => state.user.selectedUser),
+    requestSuccess$: this.store.select((state: AppState) => state.user.selectedUser),
     // @ts-ignore
-    requestFailure$: () => this.store.select((state: AppState) => state.user.error)
+    requestFailure$: this.store.select((state: AppState) => state.user.error)
   };
   bundles:IResolveBundle[] = [this.bundle];
   constructor(private store: Store) { }
