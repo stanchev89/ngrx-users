@@ -15,7 +15,7 @@ export class UserEffects {
     mergeMap((action: Action) =>
       this.loadUsersRequest
         .pipe(
-          takeWhile(() => action.type === types.loadUsersCancelFetch),
+          takeWhile(() => action.type !== types.loadUsersCancelFetch),
           map(users => ({type: types.loadUsersSuccess, users: users})),
           catchError(() => of({type: types.loadUsersFail})),
 
