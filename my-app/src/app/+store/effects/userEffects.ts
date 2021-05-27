@@ -33,7 +33,6 @@ export class UserEffects {
       ))
   ));
 
-  paramsId$ = this.activatedRoute.params.pipe(map(p => p.id))
   getRequestUrl(params: any = undefined): Observable<any> {
     return this.http.get(params ? (environment.url + params) : environment.url)
   }
