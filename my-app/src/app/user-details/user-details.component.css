@@ -1,0 +1,19 @@
+.user-details {
+  display: flex;
+  flex-wrap: wrap;
+  width: 30vw;
+  margin: 50px auto;
+  align-items: center;
+  justify-content: space-between;
+  border : 1px solid black;
+  border-radius: 6px;
+  padding: 10px;
+}
+.user-details h1 {
+  flex-basis: 100%;
+  text-align: center;
+}
+.user-details h3 {
+  margin: 12px;
+  text-align: center;
+}

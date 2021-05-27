@@ -1,0 +1,60 @@
+
+<article class="user-details" *ngIf="selectedUser$ | async">
+  <h1>Selected user</h1>
+  <article class="user-details-labels">
+    <p>name:</p>
+    <p>id:</p>
+    <p>username:</p>
+    <p>email:</p>
+    <p>street:</p>
+    <p>suite:</p>
+    <p>city:</p>
+    <p>zip code:</p>
+    <p>phone:</p>
+    <p>web-site:</p>
+    <p>company name:</p>
+    <p>company catchPhrase:</p>
+    <p>company bs:</p>
+  </article>
+  <article class="user-details-content">
+    <h3>{{(selectedUser$ | async)?.name}}</h3>
+    <h3>{{(selectedUser$ | async)?.id}}</h3>
+    <h3>{{(selectedUser$ | async)?.username}}</h3>
+    <h3>{{(selectedUser$ | async)?.email}}</h3>
+    <h3>{{(selectedUser$ | async)?.address?.street}}</h3>
+    <h3>{{(selectedUser$ | async)?.address?.suite}}</h3>
+    <h3>{{(selectedUser$ | async)?.address?.city}}</h3>
+    <h3>{{(selectedUser$ | async)?.address?.zipcode}}</h3>
+    <h3>{{(selectedUser$ | async)?.phone}}</h3>
+    <h3>{{(selectedUser$ | async)?.website}}</h3>
+    <h3>{{(selectedUser$ | async)?.company?.name}}</h3>
+    <h3>{{(selectedUser$ | async)?.company?.catchPhrase}}</h3>
+    <h3>{{(selectedUser$ | async)?.company?.bs}}</h3>
+  </article>
+</article>
+
+
+
+<!--export interface IUser {-->
+<!--id: number;-->
+<!--name: string;-->
+<!--username: string;-->
+<!--email: string;-->
+<!--address: {-->
+<!--street: string;-->
+<!--suite: string;-->
+<!--city: string;-->
+<!--zipcode: string;-->
+<!--geo: {-->
+<!--lat: number;-->
+<!--lng: number-->
+<!--}-->
+<!--},-->
+<!--phone: string;-->
+<!--website: string;-->
+<!--company: {-->
+<!--name: string;-->
+<!--catchPhrase: string;-->
+<!--bs: string;-->
+<!--}-->
+<!--  }-->

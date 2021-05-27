@@ -6,7 +6,10 @@ export const types = {
   loadUsersCancelFetch: `${userActionNameSpace} Load Users Cancel Fetch`,
   loadUsersSuccess: `${userActionNameSpace} Load Users Success`,
   loadUsersFail: `${userActionNameSpace} Load Users Fail`,
-  selectedUser: `${userActionNameSpace} Selected User`
+  selectUserFetch: `${userActionNameSpace} Select User Fetch`,
+  selectCancelFetch: `${userActionNameSpace} Select User Cancel Fetch`,
+  selectUserSuccess: `${userActionNameSpace} Select User Success`,
+  selectUserFail: `${userActionNameSpace} Select User Fail`,
 };
 
 export const loadUsersFetch = createAction(
@@ -27,7 +30,21 @@ export const loadUsersFail = createAction(
   props<{error: string}>()
 );
 
-export const selectedUser = createAction(
-  types.selectedUser,
+export const selectUserFetch = createAction(
+  types.selectUserFetch,
+  props<{ id: string | number }>()
+);
+
+export const selectUserCancelFetch = createAction(
+  types.selectCancelFetch,
+);
+
+export const selectUserSuccess = createAction(
+  types.selectUserSuccess,
   props<{selectedUser: IUser}>()
+);
+
+export const selectUserFail = createAction(
+  types.selectUserSuccess,
+  props<{error: string}>()
 );

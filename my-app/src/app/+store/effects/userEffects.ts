@@ -1,31 +1,47 @@
 import {Injectable} from '@angular/core';
-import {act, Actions, createEffect, ofType} from "@ngrx/effects";
-import {types} from "../actions/userActions";
-import {catchError, debounce, debounceTime, map, mergeMap, switchMap, takeUntil, takeWhile} from "rxjs/operators";
+import {Actions, createEffect, ofType} from "@ngrx/effects";
+import {catchError, map, mergeMap, takeUntil, tap, withLatestFrom} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
+import {UserModel} from "../model/userModel";
+import {IUser} from "../../interfaces/IUser";
 import {Observable, of} from "rxjs";
-import {Action} from "@ngrx/store";
+import {environment} from "../../../environments/environment";
+import {ActivatedRoute} from "@angular/router";
+import {createLogErrorHandler} from "@angular/compiler-cli/ngcc/src/execution/tasks/completion";
 
 
 @Injectable()
 export class UserEffects {
 
-  loadUsers$ = createEffect(() => this.actions$.pipe(
-    ofType(types.loadUsersFetch, types.loadUsersCancelFetch),
-    mergeMap((action: Action) =>
-      this.loadUsersRequest
+  public loadUsers$ = createEffect(() => this.actions$.pipe(
+    ofType(this.userModel.actions.loadUsersFetch),
+    takeUntil(this.actions$.pipe(ofType(this.userModel.actions.loadUsersCancelFetch))),
+    mergeMap(() =>
+      this.getRequestUrl()
         .pipe(
-          takeWhile(() => action.type !== types.loadUsersCancelFetch),
-          map(users => ({type: types.loadUsersSuccess, users: users})),
-          catchError(() => of({type: types.loadUsersFail})),
-
+          map(this.userModel.actions.loadUsersSuccess),
+          catchError(() => this.userModel.actions.loadUsersFail)
         ))
   ));
 
-  loadUsersRequest = this.http.get('https://jsonplaceholder.typicode.com/users/');
+  public selectUser$ = createEffect(() => this.actions$.pipe(
+    ofType(this.userModel.actions.selectUserFetch),
+    takeUntil(this.actions$.pipe(ofType(this.userModel.actions.selectUserCancelFetch))),
+    withLatestFrom(this.userModel.actions.selectUserFetch),
+    mergeMap(({id}: any) =>
+      this.getRequestUrl(id).pipe(
+        map(this.userModel.actions.selectUserSuccess),
+        catchError(() => this.userModel.actions.selectUserFail)
+      ))
+  ));
+
+  paramsId$ = this.activatedRoute.params.pipe(map(p => p.id))
+  getRequestUrl(params: any = undefined): Observable<any> {
+    return this.http.get(params ? (environment.url + params) : environment.url)
+  }
 
 
-  constructor(private actions$: Actions, private http: HttpClient) {
+  constructor(private actions$: Actions, private http: HttpClient, private userModel: UserModel, private activatedRoute: ActivatedRoute) {
   }
 
 

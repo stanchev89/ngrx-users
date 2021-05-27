@@ -1,4 +1,4 @@
-<table style="width:100%">
+<table style="width:100%" *ngIf="(allUsers$ | async)?.length">
   <tr>
     <th>Id</th>
     <th>Name</th>
@@ -9,6 +9,7 @@
     <th>Company name</th>
   </tr>
   <tr *ngFor="let user of allUsers$ | async">
+    <button (click)="selectUserHandler(user)">Details</button>
     <td>{{user.id}}</td>
     <td>{{user.name}}</td>
     <td>{{user.email}}</td>
@@ -19,3 +20,11 @@
   </tr>
 
 </table>
+
+
+<section class="selected-user" [dbResolve]="bundles" #userDetailsResolveData="dbResolve">
+  <div *ngIf="userDetailsResolveData.isResolving" class="loader">
+    <p>Loading...</p>
+  </div>
+  <app-user-details *ngIf="!userDetailsResolveData.isResolving"></app-user-details>
+</section>

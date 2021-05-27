@@ -1,6 +1,12 @@
-import { Component } from '@angular/core';
-import {Store} from "@ngrx/store";
-import * as fromUserSelectors from '../+store/selectors';
+import {Component} from '@angular/core';
+import {UserModel} from "../+store/model/userModel";
+import {IUser} from "../interfaces/IUser";
+import {ActivatedRoute, Router} from "@angular/router";
+import {map, tap} from "rxjs/operators";
+import {environment} from "../../environments/environment";
+import {IResolveBundle} from "../interfaces/IResolveBundle";
+import {BehaviorSubject, Observable, of} from "rxjs";
+
 
 
 @Component({
@@ -8,9 +14,28 @@ import * as fromUserSelectors from '../+store/selectors';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent {
-  // @ts-ignore
-  allUsers$ = this.store.select(fromUserSelectors.getUsers);
-  constructor(private store: Store) { }
+export class UserListComponent{
+  allUsers$ = this.userModel.select.allUsers$;
+  paramsId$ = this.activatedRoute.params.pipe(map(p => p.id));
+  selectedUser$ = this.userModel.select.selectedUser$;
+
+  constructor(private userModel: UserModel, private router: Router,private activatedRoute: ActivatedRoute) {
+  }
+
+  bundleSelectedUser: IResolveBundle = {
+    dispatchRequest: (deps:[]) =>
+      deps.forEach((dep: string | number | undefined )=>
+        !dep ? of() : this.userModel.dispatch.selectUserFetch(dep))
+    ,
+    dispatchRequestCancel: this.userModel.dispatch.loadUsersCancelFetch,
+    requestSuccess$: this.userModel.select.selectedUser$,
+    requestFailure$: this.userModel.select.error$,
+    dependencies: [this.paramsId$]
+  };
+  bundles:IResolveBundle[] = [this.bundleSelectedUser];
+
+  selectUserHandler(user: IUser): void {
+     this.router.navigate(['users',user.id])
+  }
 
 }
