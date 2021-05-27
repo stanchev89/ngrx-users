@@ -7,5 +7,5 @@ export interface IDispatchUserModel {
   loadUsersSuccess: (users: IUser[]) => void;
   selectUserFetch: (id: number | string) => void;
   selectUserCancelFetch: () => void;
-  selectUserSuccess: (users: IUser) => void;
+  selectUserSuccess: (selectedUser: IUser | undefined) => void;
 }

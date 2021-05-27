@@ -20,7 +20,7 @@ export class UserModel {
     loadUsersSuccess: (users: IUser[]) => this.store.dispatch(fromUserActions.loadUsersSuccess({users: users})),
     loadUsersCancelFetch: () => this.store.dispatch(fromUserActions.loadUsersCancelFetch()),
     selectUserFetch: (id: string | number) =>this.store.dispatch(fromUserActions.selectUserFetch({id})),
-    selectUserSuccess: (user: IUser) => this.store.dispatch(fromUserActions.selectUserSuccess({selectedUser: user})),
+    selectUserSuccess: (user: IUser | undefined) => this.store.dispatch(fromUserActions.selectUserSuccess({selectedUser: user})),
     selectUserCancelFetch: () => this.store.dispatch(fromUserActions.selectUserCancelFetch()),
   };
 
@@ -37,7 +37,7 @@ export class UserModel {
     loadUsersFail: fromUserActions.loadUsersFail,
     selectUserFetch: fromUserActions.selectUserFetch,
     selectUserCancelFetch: fromUserActions.selectUserCancelFetch,
-    selectUserSuccess: (user: IUser) => fromUserActions.selectUserSuccess({selectedUser: user}),
+    selectUserSuccess: (selectedUser: IUser) => fromUserActions.selectUserSuccess({selectedUser}),
     selectUserFail: fromUserActions.selectUserFail,
   };
 

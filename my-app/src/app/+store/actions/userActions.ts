@@ -41,7 +41,7 @@ export const selectUserCancelFetch = createAction(
 
 export const selectUserSuccess = createAction(
   types.selectUserSuccess,
-  props<{selectedUser: IUser}>()
+  props<{selectedUser: IUser | undefined}>()
 );
 
 export const selectUserFail = createAction(

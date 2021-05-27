@@ -20,6 +20,9 @@
   </tr>
 
 </table>
+<div *ngIf="!(allUsers$ | async)?.length" class="loader">
+  <p>Loading...</p>
+</div>
 
 
 <section class="selected-user" [dbResolve]="bundles" #userDetailsResolveData="dbResolve">

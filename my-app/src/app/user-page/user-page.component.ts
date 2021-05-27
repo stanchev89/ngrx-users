@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {IResolveBundle} from "../interfaces/IResolveBundle";
 import {BehaviorSubject} from "rxjs";
 import {UserModel} from "../+store/model/userModel";
@@ -9,9 +9,10 @@ import {UserModel} from "../+store/model/userModel";
   templateUrl: './user-page.component.html',
   styleUrls: ['./user-page.component.css']
 })
-export class UserPageComponent{
+export class UserPageComponent implements OnDestroy{
 
   reloadUsers$ = new BehaviorSubject(undefined);
+  dispatchSelectedUser = this.userModel.dispatch.selectUserSuccess;
 
   bundleAllUsers: IResolveBundle = {
     dispatchRequest:this.userModel.dispatch.loadUsersFetch,
@@ -30,5 +31,8 @@ export class UserPageComponent{
   reloadBtnHandler(): void {
     this.reloadUsers$.next(undefined);
   }
-
+  ngOnDestroy() {
+    this.dispatchSelectedUser(undefined);
+    this.reloadUsers$.complete();
+  }
 }
