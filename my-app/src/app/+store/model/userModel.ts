@@ -6,8 +6,7 @@ import {IUser} from "../../interfaces/IUser";
 import {IDispatchUserModel} from "../../interfaces/IDispatchUserModel";
 import {ISelectUserModel} from "../../interfaces/ISelectUserModel";
 import {IActionsUserModel} from "../../interfaces/IActionsUserModel";
-import {Observable, of} from "rxjs";
-import {tap} from "rxjs/operators";
+
 
 @Injectable()
 export class UserModel {

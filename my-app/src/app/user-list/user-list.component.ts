@@ -2,10 +2,9 @@ import {Component} from '@angular/core';
 import {UserModel} from "../+store/model/userModel";
 import {IUser} from "../interfaces/IUser";
 import {ActivatedRoute, Router} from "@angular/router";
-import {map, tap} from "rxjs/operators";
-import {environment} from "../../environments/environment";
+import {map} from "rxjs/operators";
 import {IResolveBundle} from "../interfaces/IResolveBundle";
-import {BehaviorSubject, Observable, of} from "rxjs";
+import {of} from "rxjs";
 
 
 

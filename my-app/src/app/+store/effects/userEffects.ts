@@ -3,11 +3,9 @@ import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {catchError, map, mergeMap, takeUntil, tap, withLatestFrom} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {UserModel} from "../model/userModel";
-import {IUser} from "../../interfaces/IUser";
 import {Observable, of} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {ActivatedRoute} from "@angular/router";
-import {createLogErrorHandler} from "@angular/compiler-cli/ngcc/src/execution/tasks/completion";
 
 
 @Injectable()
