@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {catchError, map, mergeMap, switchMap, takeUntil, tap, withLatestFrom} from "rxjs/operators";
+import {catchError, map, mergeMap, takeUntil} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {UserModel} from "../model/userModel";
-import {Observable, of} from "rxjs";
+import {Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {ActivatedRoute} from "@angular/router";
-import * as fromUserActions from '../actions/userActions';
 
 @Injectable()
 export class UserEffects {
@@ -16,9 +15,9 @@ export class UserEffects {
     ofType(this.userModel.actions.loadUsersFetch),
     mergeMap(() =>
       this.getRequestUrl().pipe(
+        takeUntil(this.actions$.pipe(ofType(this.userModel.actions.loadUsersCancelFetch))),
         map(this.userModel.actions.loadUsersSuccess),
         catchError(() => this.userModel.actions.loadUsersFail),
-        takeUntil(this.actions$.pipe(ofType(this.userModel.actions.loadUsersCancelFetch)))
       )
     )
   ));
@@ -27,9 +26,9 @@ export class UserEffects {
     ofType(this.userModel.actions.selectUserFetch),
     mergeMap(({id}: any) =>
       this.getRequestUrl(id).pipe(
+        takeUntil(this.actions$.pipe(ofType(this.userModel.actions.selectUserCancelFetch))),
         map(this.userModel.actions.selectUserSuccess),
         catchError(() => this.userModel.actions.selectUserFail),
-        takeUntil(this.actions$.pipe(ofType(this.userModel.actions.selectUserCancelFetch)))
       )
     )
   ));
