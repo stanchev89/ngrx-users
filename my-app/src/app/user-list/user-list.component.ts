@@ -26,9 +26,9 @@ export class UserListComponent{
       deps.forEach((dep: string | number | undefined )=>
         !dep ? of() : this.userModel.dispatch.selectUserFetch(dep))
     ,
-    dispatchRequestCancel: this.userModel.dispatch.loadUsersCancelFetch,
-    requestSuccess$: this.userModel.select.selectedUser$,
-    requestFailure$: this.userModel.select.error$,
+    dispatchRequestCancel: this.userModel.dispatch.selectUserCancelFetch,
+    requestSuccess$: this.userModel.listenActions.selectedUserSuccess,
+    requestFailure$: this.userModel.listenActions.selectedUserFail,
     dependencies: [this.paramsId$]
   };
   bundles:IResolveBundle[] = [this.bundleSelectedUser];

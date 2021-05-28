@@ -10,26 +10,23 @@ import {UserModel} from "../+store/model/userModel";
   styleUrls: ['./user-page.component.css']
 })
 export class UserPageComponent implements OnDestroy{
-
   reloadUsers$ = new BehaviorSubject(undefined);
   dispatchSelectedUser = this.userModel.dispatch.selectUserSuccess;
 
   bundleAllUsers: IResolveBundle = {
-    dispatchRequest:this.userModel.dispatch.loadUsersFetch,
+    dispatchRequest: this.userModel.dispatch.loadUsersFetch,
     dispatchRequestCancel: this.userModel.dispatch.loadUsersCancelFetch,
-    requestSuccess$:this.userModel.select.allUsers$,
-    requestFailure$: this.userModel.select.error$,
+    requestSuccess$: this.userModel.listenActions.loadUsersSuccess,
+    requestFailure$: this.userModel.listenActions.loadUsersFail,
     dependencies: [this.reloadUsers$]
   };
-
-
 
   bundles:IResolveBundle[] = [this.bundleAllUsers];
 
   constructor(private userModel: UserModel) { }
 
   reloadBtnHandler(): void {
-    this.reloadUsers$.next(undefined);
+    this.reloadUsers$.next(undefined)
   }
   ngOnDestroy() {
     this.dispatchSelectedUser(undefined);

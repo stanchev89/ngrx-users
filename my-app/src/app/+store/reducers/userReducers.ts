@@ -46,7 +46,7 @@ export const reducers = createReducer(
   })),
   on(userActions.selectUserCancelFetch,((state: IUserState, action) => {
     return {
-      ...state,
+      ...state
     }
   })),
   on(userActions.selectUserSuccess,((state: IUserState, action) => {

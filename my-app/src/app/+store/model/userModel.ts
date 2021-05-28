@@ -1,17 +1,19 @@
 import {Injectable} from '@angular/core';
 import {Store} from "@ngrx/store";
 import {AppState} from "../reducers";
-import * as fromUserActions from '../actions/userActions';
 import {IUser} from "../../interfaces/IUser";
 import {IDispatchUserModel} from "../../interfaces/IDispatchUserModel";
 import {ISelectUserModel} from "../../interfaces/ISelectUserModel";
 import {IActionsUserModel} from "../../interfaces/IActionsUserModel";
+import {Actions, ofType} from "@ngrx/effects";
+import {types} from '../actions/userActions';
+import * as fromUserActions from '../actions/userActions'
 
 
 @Injectable()
 export class UserModel {
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>,private actions$: Actions) {
   }
 
   dispatch: IDispatchUserModel = {
@@ -39,5 +41,12 @@ export class UserModel {
     selectUserSuccess: (selectedUser: IUser) => fromUserActions.selectUserSuccess({selectedUser}),
     selectUserFail: fromUserActions.selectUserFail,
   };
+
+  listenActions = {
+    loadUsersSuccess: this.actions$.pipe(ofType(types.loadUsersSuccess)),
+    loadUsersFail: this.actions$.pipe(ofType(types.loadUsersFail)),
+    selectedUserSuccess: this.actions$.pipe(ofType(types.selectUserSuccess)),
+    selectedUserFail: this.actions$.pipe(ofType(types.selectUserFail))
+  }
 
 }
