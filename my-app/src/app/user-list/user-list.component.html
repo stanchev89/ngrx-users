@@ -26,7 +26,7 @@
 
 
 <section class="selected-user" [dbResolve]="bundles" #userDetailsResolveData="dbResolve">
-  <div *ngIf="userDetailsResolveData.isResolving" class="loader">
+  <div *ngIf="userDetailsResolveData.isResolving && (paramsId$ | async)" class="loader">
     <p>Loading...</p>
   </div>
   <app-user-details *ngIf="!userDetailsResolveData.isResolving"></app-user-details>

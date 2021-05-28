@@ -11,20 +11,10 @@ import * as fromUserActions from '../actions/userActions';
 @Injectable()
 export class UserEffects {
 
-  // public loadUsers$ = createEffect(() => this.actions$.pipe(
-  //   ofType(this.userModel.actions.loadUsersFetch),
-  //   takeUntil(this.actions$.pipe(ofType(this.userModel.actions.loadUsersCancelFetch))),
-  //   mergeMap(() =>
-  //     this.getRequestUrl()
-  //       .pipe(
-  //         map(this.userModel.actions.loadUsersSuccess),
-  //         catchError(() => this.userModel.actions.loadUsersFail)
-  //       ))
-  // ));
 
   public loadUsers$ = createEffect(() => this.actions$.pipe(
     ofType(this.userModel.actions.loadUsersFetch),
-    switchMap(() =>
+    mergeMap(() =>
       this.getRequestUrl().pipe(
         map(this.userModel.actions.loadUsersSuccess),
         catchError(() => this.userModel.actions.loadUsersFail),
@@ -35,7 +25,7 @@ export class UserEffects {
 
   public selectUser$ = createEffect(() => this.actions$.pipe(
     ofType(this.userModel.actions.selectUserFetch),
-    switchMap(({id}: any) =>
+    mergeMap(({id}: any) =>
       this.getRequestUrl(id).pipe(
         map(this.userModel.actions.selectUserSuccess),
         catchError(() => this.userModel.actions.selectUserFail),
