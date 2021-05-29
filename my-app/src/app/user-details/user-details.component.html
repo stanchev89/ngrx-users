@@ -1,4 +1,4 @@
-<h1>Selected user</h1>
+<h1 *ngIf="selectedUser$ | async">Selected user</h1>
 
 <article class="user-details" *ngIf="selectedUser$ | async">
   <button (click)="clearUserBtnHandler()">Clear user</button>
