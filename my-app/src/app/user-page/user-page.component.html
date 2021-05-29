@@ -1,5 +1,6 @@
 <!--<h3>Userlist fetched from https://jsonplaceholder.typicode.com</h3>-->
 <button (click)="reloadBtnHandler()">Reload Users</button>
+<button (click)="clearUserListBtnHandler()">Clear User List</button>
 <article class="container" [dbResolve]="bundles" #resolveDirectiveData="dbResolve">
   <div *ngIf="resolveDirectiveData.isResolving" class="loader">
     <p>Loading...</p>

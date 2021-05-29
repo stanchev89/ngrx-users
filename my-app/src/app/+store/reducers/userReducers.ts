@@ -1,9 +1,8 @@
 import {createReducer,on} from '@ngrx/store';
 import {IUser} from "../../interfaces/IUser";
-import {userActions} from '../actions';
-
+import {loadUsersBundle, selectUserBundle} from '../actions/userActions';
 export interface IUserState{
-  users: IUser[];
+  users: IUser[] | null;
   selectedUser: IUser | undefined;
   error: string | undefined;
 }
@@ -14,51 +13,56 @@ const initialState: IUserState = {
   error: undefined,
 };
 
-export const reducers = createReducer(
+export const reducers = createReducer<IUserState>(
   initialState,
-  on(userActions.loadUsersFetch,((state: IUserState,action) => {
-    return {
-      ...state
-    }
-  })),
-  on(userActions.loadUsersCancelFetch,((state: IUserState,action) => {
+  on(loadUsersBundle.creators.loadUsers,((state) => {
     return {
       ...state,
+      users: []
     }
   })),
-  on(userActions.loadUsersSuccess,((state: IUserState,action) => {
+  on(loadUsersBundle.creators.loadUsersSuccess,((state,{payload: {users}}) => {
     return {
       ...state,
-      users: action.users,
+      users
     }
   })),
-  on(userActions.loadUsersFail,((state: IUserState,action) => {
+  on(loadUsersBundle.creators.loadUsersFailure,((state,{payload:{error: {message}}}) => {
     return {
       ...state,
-      error: action.error || 'Something goes wrong!',
+      error: message,
     }
   })),
-  on(userActions.selectUserFetch,((state: IUserState, action) => {
+  on(loadUsersBundle.creators.loadUsersClear,((state) => {
     return {
       ...state,
-      id: action.id
+      users: []
     }
   })),
-  on(userActions.selectUserCancelFetch,((state: IUserState, action) => {
-    return {
-      ...state
-    }
-  })),
-  on(userActions.selectUserSuccess,((state: IUserState, action) => {
+
+
+  on(selectUserBundle.creators.selectUser,( (state,{payload:{id}}) => {
     return {
       ...state,
-      selectedUser: action.selectedUser
+      id
     }
   })),
-  on(userActions.selectUserFail,((state: IUserState, action) => {
+  on(selectUserBundle.creators.selectUserSuccess,((state, {payload:{selectedUser}}) => {
     return {
       ...state,
-      error: action.error
+      selectedUser
+    }
+  })),
+  on(selectUserBundle.creators.selectUserFailure,((state, {payload:{error:{message}}}) => {
+    return {
+      ...state,
+      error: message
+    }
+  })),
+  on(selectUserBundle.creators.selectUserClear,(state => {
+    return {
+      ...state,
+      selectedUser: undefined
     }
   }))
 );

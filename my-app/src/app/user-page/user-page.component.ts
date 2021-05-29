@@ -11,25 +11,28 @@ import {UserModel} from "../+store/model/userModel";
 })
 export class UserPageComponent implements OnDestroy{
   reloadUsers$ = new BehaviorSubject(undefined);
-  dispatchSelectedUser = this.userModel.dispatch.selectUserSuccess;
 
-  bundleAllUsers: IResolveBundle = {
-    dispatchRequest: this.userModel.dispatch.loadUsersFetch,
-    dispatchRequestCancel: this.userModel.dispatch.loadUsersCancelFetch,
-    requestSuccess$: this.userModel.listenActions.loadUsersSuccess,
-    requestFailure$: this.userModel.listenActions.loadUsersFail,
+  bundleLoadAllUsers: IResolveBundle = {
+    dispatchRequest: this.userModel.dispatch.loadUsers.fetch,
+    dispatchRequestCancel: this.userModel.dispatch.loadUsers.cancel,
+    requestSuccess$: this.userModel.listen.loadUsers.success,
+    requestFailure$: this.userModel.listen.loadUsers.fail,
     dependencies: [this.reloadUsers$]
   };
 
-  bundles:IResolveBundle[] = [this.bundleAllUsers];
+  bundles:IResolveBundle[] = [this.bundleLoadAllUsers];
 
   constructor(private userModel: UserModel) { }
 
   reloadBtnHandler(): void {
     this.reloadUsers$.next(undefined)
   }
+  clearUserListBtnHandler(): void {
+    this.userModel.dispatch.loadUsers.clear();
+    this.userModel.dispatch.selectedUser.clear();
+  }
   ngOnDestroy() {
-    this.dispatchSelectedUser(undefined);
+    this.userModel.dispatch.selectedUser.clear();
     this.reloadUsers$.complete();
   }
 }

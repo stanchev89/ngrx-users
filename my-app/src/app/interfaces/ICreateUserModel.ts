@@ -6,7 +6,7 @@ interface IActionTypes {
   clear: (params?: any) => void
 }
 
-export interface IDispatchUserModel {
+export interface ICreateUserModel {
   loadUsers: IActionTypes,
   selectedUser: IActionTypes
 }

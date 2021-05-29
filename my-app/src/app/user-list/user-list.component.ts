@@ -5,6 +5,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {map} from "rxjs/operators";
 import {IResolveBundle} from "../interfaces/IResolveBundle";
 import {of} from "rxjs";
+import {Connect} from "ngrx-action-bundles";
+import {selectUserBundle} from "../+store/actions/userActions";
 
 
 
@@ -23,12 +25,12 @@ export class UserListComponent{
 
   bundleSelectedUser: IResolveBundle = {
     dispatchRequest: (deps:[]) =>
-      deps.forEach((dep: string | number | undefined )=>
-        !dep ? of() : this.userModel.dispatch.selectUserFetch(dep))
+      deps.forEach((dep: string | number )=>
+        !dep ? of() : this.userModel.dispatch.selectedUser.fetch({id:dep}))
     ,
-    dispatchRequestCancel: this.userModel.dispatch.selectUserCancelFetch,
-    requestSuccess$: this.userModel.listenActions.selectedUserSuccess,
-    requestFailure$: this.userModel.listenActions.selectedUserFail,
+    dispatchRequestCancel: this.userModel.dispatch.selectedUser.cancel,
+    requestSuccess$: this.userModel.listen.selectedUser.success,
+    requestFailure$: this.userModel.listen.selectedUser.fail,
     dependencies: [this.paramsId$]
   };
   bundles:IResolveBundle[] = [this.bundleSelectedUser];

@@ -1,29 +1,73 @@
 import {Injectable} from '@angular/core';
 import {Store} from "@ngrx/store";
 import {AppState} from "../reducers";
-import {IUser} from "../../interfaces/IUser";
 import {IDispatchUserModel} from "../../interfaces/IDispatchUserModel";
 import {ISelectUserModel} from "../../interfaces/ISelectUserModel";
-import {IActionsUserModel} from "../../interfaces/IActionsUserModel";
-import {Actions, ofType} from "@ngrx/effects";
-import {types} from '../actions/userActions';
-import * as fromUserActions from '../actions/userActions'
+import {Actions} from "@ngrx/effects";
+import {Connect} from "ngrx-action-bundles";
+import {loadUsersBundle, selectUserBundle} from "../actions/userActions";
+import {IListenUserModel} from "../../interfaces/IListenUserModel";
+import {ICreateUserModel} from "../../interfaces/ICreateUserModel";
 
 
 @Injectable()
 export class UserModel {
-
-  constructor(private store: Store<AppState>,private actions$: Actions) {
+  actions = this.connect.connectBundles([loadUsersBundle,selectUserBundle])
+  constructor(private store: Store<AppState>, private actions$: Actions, private connect: Connect) {
   }
 
   dispatch: IDispatchUserModel = {
-    loadUsersFetch: () => this.store.dispatch(fromUserActions.loadUsersFetch()),
-    loadUsersSuccess: (users: IUser[]) => this.store.dispatch(fromUserActions.loadUsersSuccess({users: users})),
-    loadUsersCancelFetch: () => this.store.dispatch(fromUserActions.loadUsersCancelFetch()),
-    selectUserFetch: (id: string | number) =>this.store.dispatch(fromUserActions.selectUserFetch({id})),
-    selectUserSuccess: (user: IUser | undefined) => this.store.dispatch(fromUserActions.selectUserSuccess({selectedUser: user})),
-    selectUserCancelFetch: () => this.store.dispatch(fromUserActions.selectUserCancelFetch()),
+    loadUsers: {
+      fetch: this.actions.dispatch.loadUsers,
+      cancel: this.actions.dispatch.loadUsersCancel,
+      success: this.actions.dispatch.loadUsersSuccess,
+      fail: this.actions.dispatch.loadUsersFailure,
+      clear: this.actions.dispatch.loadUsersClear
+    },
+    selectedUser: {
+      fetch: this.actions.dispatch.selectUser,
+      cancel: this.actions.dispatch.selectUserCancel,
+      success: this.actions.dispatch.selectUserSuccess,
+      fail: this.actions.dispatch.selectUserFailure,
+      clear: this.actions.dispatch.selectUserClear
+    }
   };
+
+
+  listen: IListenUserModel = {
+    loadUsers: {
+      fetch: this.actions.listen.loadUsers$,
+      cancel: this.actions.listen.loadUsersCancel$,
+      success: this.actions.listen.loadUsersSuccess$,
+      fail: this.actions.listen.loadUsersFailure$,
+      clear: this.actions.listen.loadUsersClear$
+    },
+    selectedUser: {
+      fetch: this.actions.listen.selectUser$,
+      cancel: this.actions.listen.selectUserCancel$,
+      success: this.actions.listen.selectUserSuccess$,
+      fail: this.actions.listen.selectUserFailure$,
+      clear: this.actions.listen.selectUserClear$
+    }
+  };
+
+  create: ICreateUserModel= {
+    loadUsers: {
+      fetch: this.actions.creators.loadUsers,
+      cancel: this.actions.creators.loadUsersCancel,
+      success: this.actions.creators.loadUsersSuccess,
+      fail: this.actions.creators.loadUsersFailure,
+      clear: this.actions.creators.loadUsersClear
+    },
+    selectedUser: {
+      fetch: this.actions.creators.selectUser,
+      cancel: this.actions.creators.selectUserCancel,
+      success: this.actions.creators.selectUserSuccess,
+      fail: this.actions.creators.selectUserFailure,
+      clear: this.actions.creators.selectUserClear
+    }
+  }
+
 
   select: ISelectUserModel = {
     allUsers$: this.store.select(state => state.user.users),
@@ -31,22 +75,5 @@ export class UserModel {
     selectedUser$: this.store.select(state => state.user.selectedUser)
   };
 
-  actions: IActionsUserModel = {
-    loadUsersFetch: fromUserActions.loadUsersFetch,
-    loadUsersCancelFetch: fromUserActions.loadUsersCancelFetch,
-    loadUsersSuccess: (users: IUser[]) => fromUserActions.loadUsersSuccess({users}),
-    loadUsersFail: fromUserActions.loadUsersFail,
-    selectUserFetch: fromUserActions.selectUserFetch,
-    selectUserCancelFetch: fromUserActions.selectUserCancelFetch,
-    selectUserSuccess: (selectedUser: IUser) => fromUserActions.selectUserSuccess({selectedUser}),
-    selectUserFail: fromUserActions.selectUserFail,
-  };
-
-  listenActions = {
-    loadUsersSuccess: this.actions$.pipe(ofType(types.loadUsersSuccess)),
-    loadUsersFail: this.actions$.pipe(ofType(types.loadUsersFail)),
-    selectedUserSuccess: this.actions$.pipe(ofType(types.selectUserSuccess)),
-    selectedUserFail: this.actions$.pipe(ofType(types.selectUserFail))
-  }
 
 }
