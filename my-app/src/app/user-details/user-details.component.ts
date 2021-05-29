@@ -9,4 +9,8 @@ import {UserModel} from "../+store/model/userModel";
 export class UserDetailsComponent{
   selectedUser$ = this.userModel.select.selectedUser$;
   constructor(private userModel: UserModel) { }
+
+  clearUserBtnHandler(): void {
+    this.userModel.dispatch.selectedUser.clear();
+  }
 }
