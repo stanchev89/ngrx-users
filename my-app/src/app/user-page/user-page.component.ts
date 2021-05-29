@@ -29,7 +29,7 @@ export class UserPageComponent implements OnDestroy{
   }
   clearUserListBtnHandler(): void {
     this.userModel.dispatch.loadUsers.clear();
-    this.userModel.dispatch.selectedUser.clear();
+    // this.userModel.dispatch.selectedUser.clear();
   }
   ngOnDestroy() {
     this.userModel.dispatch.selectedUser.clear();
