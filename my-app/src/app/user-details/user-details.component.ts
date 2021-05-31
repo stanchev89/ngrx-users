@@ -11,6 +11,6 @@ export class UserDetailsComponent{
   constructor(private userModel: UserModel) { }
 
   clearUserBtnHandler(): void {
-    this.userModel.dispatch.selectedUser.clear();
+    this.userModel.actions.dispatch.selectUserClear();
   }
 }

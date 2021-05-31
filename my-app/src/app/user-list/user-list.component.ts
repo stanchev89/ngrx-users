@@ -5,8 +5,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {map} from "rxjs/operators";
 import {IResolveBundle} from "../interfaces/IResolveBundle";
 import {of} from "rxjs";
-import {Connect} from "ngrx-action-bundles";
-import {selectUserBundle} from "../+store/actions/userActions";
 
 
 
@@ -18,7 +16,6 @@ import {selectUserBundle} from "../+store/actions/userActions";
 export class UserListComponent{
   allUsers$ = this.userModel.select.allUsers$;
   paramsId$ = this.activatedRoute.params.pipe(map(p => p.id));
-  selectedUser$ = this.userModel.select.selectedUser$;
 
   constructor(private userModel: UserModel, private router: Router,private activatedRoute: ActivatedRoute) {
   }
@@ -26,11 +23,11 @@ export class UserListComponent{
   bundleSelectedUser: IResolveBundle = {
     dispatchRequest: (deps:[]) =>
       deps.forEach((dep: string | number )=>
-        (!dep || dep === 'list') ? of() : this.userModel.dispatch.selectedUser.fetch({id:dep}))
+        (!dep || dep === 'list') ? of() : this.userModel.actions.dispatch.selectUser({id:dep}))
     ,
-    dispatchRequestCancel: this.userModel.dispatch.selectedUser.cancel,
-    requestSuccess$: this.userModel.listen.selectedUser.success,
-    requestFailure$: this.userModel.listen.selectedUser.fail,
+    dispatchRequestCancel: this.userModel.actions.dispatch.selectUserCancel,
+    requestSuccess$: this.userModel.actions.listen.selectUserSuccess$,
+    requestFailure$: this.userModel.actions.listen.selectUserFailure$,
     dependencies: [this.paramsId$]
   };
   bundles:IResolveBundle[] = [this.bundleSelectedUser];

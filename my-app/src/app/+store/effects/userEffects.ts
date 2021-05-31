@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Actions, createEffect, ofType} from "@ngrx/effects";
+import {createEffect, ofType} from "@ngrx/effects";
 import {catchError, map, mergeMap, switchMap, takeUntil} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
 import {UserModel} from "../model/userModel";
@@ -14,17 +14,7 @@ export class UserEffects {
 
   actions = this.connect.connectBundles([loadUsersBundle,selectUserBundle]);
 
-  // ** Doesnt work correctly
-  // loadUsers = createEffect(() => this.actions.listen.loadUsers$).pipe(
-  //   switchMap(() => this.getRequestUrl().pipe(
-  //     takeUntil(this.actions.listen.loadUsersCancel$),
-  //     map((users: IUser[]) => this.actions.creators.loadUsersSuccess({users})),
-  //     catchError(error => [this.actions.creators.loadUsersFailure({error})])
-  //   ))
-  // );
-
-  loadUsers = createEffect(() => this.actions$.pipe(
-    ofType(this.actions.creators.loadUsers),
+  loadUsers = createEffect(() => this.actions.listen.loadUsers$.pipe(
     switchMap(() => this.getRequestUrl().pipe(
       takeUntil(this.actions.listen.loadUsersCancel$),
       map((users: IUser[]) => this.actions.creators.loadUsersSuccess({users})),
@@ -32,7 +22,8 @@ export class UserEffects {
     ))
   ));
 
-  selectUser = createEffect(() => this.actions$.pipe(
+
+  selectUser = createEffect(() => this.actions.listen.selectUser$.pipe(
     ofType(this.actions.creators.selectUser),
     mergeMap(({payload:{id}}) => this.getRequestUrl(id).pipe(
       takeUntil(this.actions.listen.selectUserCancel$),
@@ -48,7 +39,7 @@ export class UserEffects {
   }
 
 
-  constructor(private actions$: Actions, private http: HttpClient, private userModel: UserModel, private connect: Connect) {
+  constructor(private http: HttpClient, private userModel: UserModel, private connect: Connect) {
   }
 
 
