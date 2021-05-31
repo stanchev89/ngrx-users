@@ -1,17 +1,14 @@
-import {AppState} from "../reducers";
-import {createSelector} from "@ngrx/store";
+import {AppState, userModuleStoreName} from "../reducers";
+import {createFeatureSelector, createSelector} from "@ngrx/store";
 import {IUserState} from "../reducers/userReducers";
 
-export const getUserState = (state: AppState) => state.user;
-export const getUserStateAllUsers = createSelector(
-  getUserState,
-  (state: IUserState) => state.users
-);
-export const getUserStateSelectedUser = createSelector(
-  getUserState,
-  (state: IUserState) => state.selectedUser
-);
-export const getUserStateError = createSelector(
-  getUserState,
-  (state: IUserState) => state.error
-)
+export const getUserState = createFeatureSelector<
+  AppState,
+  IUserState
+  >(userModuleStoreName);
+
+export const userSelectors = {
+  allUsers: createSelector(getUserState,state => state.users),
+  selectedUser: createSelector(getUserState, state => state.selectedUser),
+  error: createSelector(getUserState, state => state.error)
+};

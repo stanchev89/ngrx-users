@@ -14,7 +14,7 @@ import {of} from "rxjs";
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent{
-  allUsers$ = this.userModel.select.allUsers$;
+  allUsers$ = this.userModel.selectors.allUsers$;
   paramsId$ = this.activatedRoute.params.pipe(map(p => p.id));
 
   constructor(private userModel: UserModel, private router: Router,private activatedRoute: ActivatedRoute) {

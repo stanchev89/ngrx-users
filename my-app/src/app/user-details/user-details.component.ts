@@ -7,7 +7,7 @@ import {UserModel} from "../+store/model/userModel";
   styleUrls: ['./user-details.component.css']
 })
 export class UserDetailsComponent{
-  selectedUser$ = this.userModel.select.selectedUser$;
+  selectedUser$ = this.userModel.selectors.selectedUser$;
   constructor(private userModel: UserModel) { }
 
   clearUserBtnHandler(): void {
